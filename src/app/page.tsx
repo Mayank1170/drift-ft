@@ -1,4 +1,3 @@
-// src/app/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -9,7 +8,6 @@ import { SubaccountCard } from '@/components/subaccounts/SubaccountCard';
 import { CreateSubaccountCard } from '@/components/subaccounts/CreateSubaccountCard';
 import { Input } from '@/components/ui/input';
 
-// This would typically come from an API or Drift SDK
 const mockSubaccounts = [
   { id: 1, collateral: '$5,243.78 USDC', positions: 2, orders: 1 },
   { id: 2, collateral: '$12,876.45 USDC', positions: 1, orders: 3 },
@@ -31,8 +29,6 @@ export default function Home() {
       return;
     }
     
-    // Here you would typically fetch subaccounts for the given wallet address
-    // using the Drift SDK
     console.log(`Viewing wallet: ${walletAddress}`);
     // toast({
     //   title: 'Success',
@@ -50,7 +46,6 @@ export default function Home() {
       return;
     }
     
-    // Here you would typically create a new subaccount using the Drift SDK
     console.log('Creating new subaccount');
     const newId = subaccounts.length + 1;
     setSubaccounts([
@@ -87,12 +82,10 @@ export default function Home() {
                   className="absolute right-0 top-0 h-full rounded-l-none"
                   aria-label="View wallet"
                 >
-                  {/* <MagnifyingGlassIcon className="h-4 w-4" /> */}
                 </button>
               </div>
             </div>
 
-            {/* Subaccounts Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {subaccounts.map((account) => (
                 <SubaccountCard
@@ -104,7 +97,6 @@ export default function Home() {
                 />
               ))}
 
-              {/* Create New Subaccount */}
               <CreateSubaccountCard onCreateSubaccount={handleCreateSubaccount} />
             </div>
           </div>

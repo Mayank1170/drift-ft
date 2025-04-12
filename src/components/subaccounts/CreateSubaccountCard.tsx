@@ -1,4 +1,3 @@
-// src/components/subaccounts/CreateSubaccountCard.tsx
 
 interface CreateSubaccountCardProps {
   onCreateSubaccount: () => void;
