@@ -1,67 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { SubaccountCard } from '@/components/subaccounts/SubaccountCard';
 import { CreateSubaccountCard } from '@/components/subaccounts/CreateSubaccountCard';
 import { Input } from '@/components/ui/input';
+import { useDriftStore } from '@/store';
+import dynamic from 'next/dynamic';
 
-const mockSubaccounts = [
-  { id: 1, collateral: '$5,243.78 USDC', positions: 2, orders: 1 },
-  { id: 2, collateral: '$12,876.45 USDC', positions: 1, orders: 3 },
-  { id: 3, collateral: '$8,105.22 USDC', positions: 0, orders: 0 },
-];
+const DriftIntegration = dynamic(
+  () => import('@/components/DriftIntegration'),
+  { ssr: false }
+);
 
 export default function Home() {
-  const { connected } = useWallet();
+  const { connected, publicKey } = useWallet();
   const [walletAddress, setWalletAddress] = useState('');
-  const [subaccounts, setSubaccounts] = useState(mockSubaccounts);
-  
+  const { subaccounts, fetchSubaccounts } = useDriftStore();
+
+  useEffect(() => {
+    if (connected && publicKey) {
+      fetchSubaccounts(publicKey);
+    }
+  }, [connected, publicKey, fetchSubaccounts]);
+
   const handleViewWallet = () => {
-    if (!walletAddress) {
-      // toast({
-      //   title: 'Error',
-      //   description: 'Please enter a wallet address',
-      //   variant: 'destructive',
-      // });
-      return;
-    }
-    
+    if (!walletAddress) return;
     console.log(`Viewing wallet: ${walletAddress}`);
-    // toast({
-    //   title: 'Success',
-    //   description: `Viewing wallet: ${walletAddress}`,
-    // });
   };
-  
+
   const handleCreateSubaccount = () => {
-    if (!connected) {
-      // toast({
-      //   title: 'Error',
-      //   description: 'Please connect your wallet first',
-      //   variant: 'destructive',
-      // });
-      return;
-    }
-    
+    if (!connected) return;
     console.log('Creating new subaccount');
-    const newId = subaccounts.length + 1;
-    setSubaccounts([
-      ...subaccounts,
-      { id: newId, collateral: '$0.00 USDC', positions: 0, orders: 0 }
-    ]);
-    
-    // toast({
-    //   title: 'Success',
-    //   description: `Created subaccount #${newId}`,
-    // });
   };
 
   return (
     <div className="min-h-screen bg-[#111827] text-white">
       <Header />
+      <DriftIntegration />
 
       <div className="flex flex-col md:flex-row">
         <Sidebar />
@@ -81,8 +59,7 @@ export default function Home() {
                   onClick={handleViewWallet}
                   className="absolute right-0 top-0 h-full rounded-l-none"
                   aria-label="View wallet"
-                >
-                </button>
+                />
               </div>
             </div>
 
@@ -96,7 +73,6 @@ export default function Home() {
                   orders={account.orders}
                 />
               ))}
-
               <CreateSubaccountCard onCreateSubaccount={handleCreateSubaccount} />
             </div>
           </div>

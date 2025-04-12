@@ -39,10 +39,16 @@ export function SubaccountCard({ id, collateral, positions, orders }: Subaccount
       </div>
 
       <div className="flex gap-2">
-        <button onClick={handleViewDetails} className="bg-blue-600 hover:bg-blue-700 rounded-md text-sm">
+        <button 
+          onClick={handleViewDetails} 
+          className="flex-1 bg-blue-600 hover:bg-blue-700 text-sm"
+        >
           View Details
         </button>
-        <button onClick={handleTrading} className="bg-blue-600 hover:bg-blue-700 rounded-md text-sm">
+        <button 
+          onClick={handleTrading} 
+          className="flex-1 bg-gray-700 hover:bg-gray-600 text-sm"
+        >
           Trading
         </button>
       </div>
